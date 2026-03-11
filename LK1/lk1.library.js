@@ -1,22 +1,42 @@
 export class Person {
-  constructor(firstName, lastName) {
+  constructor(firstName, middleName, lastName, birthDate, schoolName) {
     this.firstName = firstName ?? "John";
+    this.middleName = middleName;
     this.lastName = lastName ?? "Doe";
+    this.birthDate = birthDate;
+    this.schoolName = schoolName;
   }
 
   fullName() {
-    return `${this.firstName} ${this.lastName}`;
+    return [this.firstName, this.middleName, this.lastName].filter(Boolean).join(" ");
   }
 
   age() {
-    return new Date().getFullYear() - 1992;
+    if (!(this.birthDate instanceof Date)) {
+      return undefined;
+    }
+
+    const today = new Date();
+    let age = today.getFullYear() - this.birthDate.getFullYear();
+    const monthDiff = today.getMonth() - this.birthDate.getMonth();
+    const dayDiff = today.getDate() - this.birthDate.getDate();
+
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      age -= 1;
+    }
+
+    return age;
+  }
+
+  toString() {
+    return this.fullName();
   }
 }
 
 export class Teacher extends Person {
-  constructor(firstName, lastName, schoolName) {
-    super(firstName, lastName);
-    this.schoolName = schoolName ?? "unknown";
+  constructor(firstName, middleName, lastName, birthDate, schoolName = "HFU") {
+    super(firstName, middleName, lastName, birthDate, schoolName);
+    this.schoolName = schoolName;
   }
 
   fullName() {
@@ -26,81 +46,58 @@ export class Teacher extends Person {
 
 export function getFirstAndLastLetters(test) {
   return {
-    first: test.at(1),
+    first: test.at(0),
     last: test.at(-1),
   };
 }
 
 export function getReverse(test) {
-  return test.split("").reverse();
+  return test.split("").reverse().join("");
 }
 
 export function getCapitalized(test) {
-  return test.map(t => t);
+  return test.map((t) => t.toUpperCase());
 }
 
 export function getOddCapitalized(test) {
-  return test.map((t, i) => {
-    return t.toUpperCase();
-  });
+  return test.map((t, i) => (i % 2 === 1 ? t.toUpperCase() : t));
 }
 
-export const getFibonacci = n => {
-  if (!Number.isInteger(n) || n < 0) {
-    return -1;
-  }
-
-  if (n === 0 || n === 1) {
-    return n;
-  }
-
-  return getFibonacci(n - 1) + getFibonacci(n - 2);
-};
-
 export function* getFibonacciSequence() {
-  let i = 0;
-  while (i >= 0) {
-    yield 0;
+  let a = 0;
+  let b = 1;
 
-    i += 1;
+  while (true) {
+    yield a;
+    [a, b] = [b, a + b];
   }
 }
 
 export function getCopyOfArray(a) {
-  return a;
+  return [...a];
 }
 
 export function getJsonWithNiceFormattingAndNoNumbers(obj) {
   return JSON.stringify(
     obj,
-    (k, v) => {
-      return typeof v === 0 ? undefined : v;
-    },
+    (k, v) => (typeof v === "number" ? undefined : v),
     2,
   );
 }
 
 export function getPropertyNames(obj) {
-  function* getKeys() {
-    for (const objKey in obj) {
-      yield objKey;
-    }
-  }
-
-  return getKeys();
+  return Object.keys(obj);
 }
 
 export function getPropertyValues(obj) {
-  function* getValues() {
-    for (const objKey in obj) {
-      yield objKey;
-    }
-  }
-
-  return [...getValues()];
+  return Object.values(obj);
 }
 
 export function divide(numerator, denominator) {
+  if (denominator === 0) {
+    return NaN;
+  }
+
   return numerator / denominator;
 }
 
@@ -114,20 +111,18 @@ export function strictDivide(numerator, denominator) {
 
 export function safeDivide(numerator, denominator) {
   try {
-    strictDivide(numerator, denominator);
+    return strictDivide(numerator, denominator);
   } catch {
     return NaN;
   }
 }
 
 export function getObjectWithAOnly(obj) {
-  const { a, rest } = obj;
-
-  return a;
+  const { a } = obj;
+  return { a };
 }
 
 export function getObjectWithAllButA(obj) {
-  const { a, rest } = obj;
-
-  return { rest };
+  const { a, ...rest } = obj;
+  return rest;
 }

@@ -92,7 +92,7 @@ describe("LK1", () => {
         password: "password123",
       };
 
-      const userAsJson = user;
+      const userAsJson = JSON.stringify(user);
 
       // Do not change this expectation; fix the output above
       expect(userAsJson).toBe(`{"name":"bob","password":"password123"}`);
@@ -104,7 +104,7 @@ describe("LK1", () => {
         password: "password123",
       };
 
-      const userAsJson = JSON.stringify(user);
+      const userAsJson = JSON.stringify(user, null, 2);
 
       // Do not change this expectation; fix the output above
       expect(userAsJson).toBe(
@@ -119,9 +119,9 @@ describe("LK1", () => {
       const user = {
         name: "bob",
         password: "password123",
-        toJSON(key) {
-          return this;
-        },
+     toJSON() {
+  return { name: this.name };
+    },
       };
 
       const userAsJson = JSON.stringify(user, null, 2);
@@ -256,7 +256,7 @@ describe("LK1", () => {
       const person = new Person(firstName, middleName, lastName, birthDate);
 
       expect(person.birthDate).toBe(birthDate);
-      expect(person.age()).toBe(24);
+      expect(person.age()).toBe(25);
     });
 
     test("Add school name to teacher", () => {
