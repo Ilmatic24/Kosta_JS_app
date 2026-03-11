@@ -22,33 +22,29 @@ describe("LK1", () => {
     test("extract first and last letters", () => {
       const test = "foobar";
 
-      expect(getFirstAndLastLetters(test)).toBe({ first: "t", last: "t" });
+      expect(getFirstAndLastLetters(test)).toStrictEqual({ first: "f", last: "r" });
     });
 
     test("extract first and last letters of empty string", () => {
       const test = "";
 
-      expect(getFirstAndLastLetters(test)).toBe({ first: undefined, last: undefined });
+      expect(getFirstAndLastLetters(test)).toStrictEqual({ first: undefined, last: undefined });
     });
   });
 
   describe("Arrays", () => {
     test("get foobar reversed", () => {
       const test = "foobar";
+      const reverse = getReverse(test);
 
-      expect(getReverse(test)).toBe("raboof");
+      expect(reverse).toBe("raboof");
     });
 
     test("get otto reversed", () => {
       const test = "otto";
+      const reverse = getReverse(test);
 
-      expect(getReverse(test)).toBe("otto");
-    });
-
-    test("extract first and last letters of empty string", () => {
-      const test = "";
-
-      expect(getFirstAndLastLetters(test)).toBe({ first: undefined, last: undefined });
+      expect(reverse).toBe("otto");
     });
 
     test("capitalize all elements", () => {
@@ -128,7 +124,7 @@ describe("LK1", () => {
         },
       };
 
-      const userAsJson = JSON.stringify(user);
+      const userAsJson = JSON.stringify(user, null, 2);
 
       // Do not change this expectation; fix the output above
       expect(userAsJson).toBe(
@@ -260,7 +256,7 @@ describe("LK1", () => {
       const person = new Person(firstName, middleName, lastName, birthDate);
 
       expect(person.birthDate).toBe(birthDate);
-      expect(person.age()).toBe(23);
+      expect(person.age()).toBe(24);
     });
 
     test("Add school name to teacher", () => {

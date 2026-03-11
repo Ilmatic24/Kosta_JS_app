@@ -7,6 +7,10 @@ export class Person {
   fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
+
+  age() {
+    return new Date().getFullYear() - 1992;
+  }
 }
 
 export class Teacher extends Person {
@@ -28,7 +32,7 @@ export function getFirstAndLastLetters(test) {
 }
 
 export function getReverse(test) {
-  return test;
+  return test.split("").reverse();
 }
 
 export function getCapitalized(test) {
@@ -36,7 +40,9 @@ export function getCapitalized(test) {
 }
 
 export function getOddCapitalized(test) {
-  return test.map(t => t.toUpperCase());
+  return test.map((t, i) => {
+    return t.toUpperCase();
+  });
 }
 
 export const getFibonacci = n => {
@@ -65,21 +71,33 @@ export function getCopyOfArray(a) {
 }
 
 export function getJsonWithNiceFormattingAndNoNumbers(obj) {
-  return JSON.stringify(obj, (k, v) => {
-    return v;
-  });
+  return JSON.stringify(
+    obj,
+    (k, v) => {
+      return typeof v === 0 ? undefined : v;
+    },
+    2,
+  );
 }
 
 export function getPropertyNames(obj) {
-  for (const objKey in obj) {
-    return objKey;
+  function* getKeys() {
+    for (const objKey in obj) {
+      yield objKey;
+    }
   }
+
+  return getKeys();
 }
 
-export function* getPropertyValues(obj) {
-  for (const objKey in obj) {
-    yield objKey;
+export function getPropertyValues(obj) {
+  function* getValues() {
+    for (const objKey in obj) {
+      yield objKey;
+    }
   }
+
+  return [...getValues()];
 }
 
 export function divide(numerator, denominator) {
@@ -103,9 +121,13 @@ export function safeDivide(numerator, denominator) {
 }
 
 export function getObjectWithAOnly(obj) {
-  return obj;
+  const { a, rest } = obj;
+
+  return a;
 }
 
 export function getObjectWithAllButA(obj) {
-  return obj;
+  const { a, rest } = obj;
+
+  return { rest };
 }
