@@ -1,8 +1,14 @@
+import { createApiClient } from "./api.js";
+import { createUi } from "./ui.js";
+
 const appElement = document.querySelector("#app");
 
 if (appElement) {
-  appElement.insertAdjacentHTML(
-    "beforeend",
-    `<p data-testid="client-status">Client-Setup bereit.</p>`
-  );
+  const apiClient = createApiClient();
+  const ui = createUi({
+    rootElement: appElement,
+    apiClient
+  });
+
+  ui.initialize();
 }
