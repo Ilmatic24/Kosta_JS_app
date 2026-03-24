@@ -563,6 +563,35 @@ export const createUi = ({ rootElement, apiClient }) => {
     };
   };
 
+  const captureSearchFocusState = (eventTarget) => {
+    if (!(eventTarget instanceof HTMLInputElement) || eventTarget.id !== "search-query") {
+      return null;
+    }
+
+    return {
+      selectionStart: eventTarget.selectionStart ?? eventTarget.value.length,
+      selectionEnd: eventTarget.selectionEnd ?? eventTarget.value.length
+    };
+  };
+
+  const restoreSearchFocus = (focusState) => {
+    if (!focusState) {
+      return;
+    }
+
+    const queryInput = rootElement.querySelector("#search-query");
+
+    if (!(queryInput instanceof HTMLInputElement)) {
+      return;
+    }
+
+    queryInput.focus();
+    queryInput.setSelectionRange(
+      focusState.selectionStart,
+      focusState.selectionEnd
+    );
+  };
+
   const resetToCreateMode = () => {
     state.selectedContactId = null;
     state.serverFieldErrors = {};
@@ -675,7 +704,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     } catch (error) {
       state.serverFieldErrors = error.details ?? {};
       setBanner("error", error.message);
-      refreshContactFormState(formElement);
+      render();
     }
   };
 
@@ -757,7 +786,8 @@ export const createUi = ({ rootElement, apiClient }) => {
     refreshContactFormState(formElement);
   };
 
-  const handleSearchChange = () => {
+  const handleSearchChange = (event) => {
+    const focusState = captureSearchFocusState(event.target);
     const formElement = rootElement.querySelector("#contact-form");
 
     if (formElement) {
@@ -767,6 +797,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     state.searchState = readSearchStateFromDom();
     saveSearchState(state.searchState);
     render();
+    restoreSearchFocus(focusState);
   };
 
   rootElement.addEventListener("submit", async (event) => {
@@ -826,7 +857,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     }
 
     if (event.target.id === "search-query" || event.target.dataset.searchField === "true") {
-      handleSearchChange();
+      handleSearchChange(event);
     }
   });
 
@@ -837,7 +868,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     }
 
     if (event.target.dataset.searchField === "true") {
-      handleSearchChange();
+      handleSearchChange(event);
     }
   });
 
