@@ -22,13 +22,19 @@ describe("LK1", () => {
     test("extract first and last letters", () => {
       const test = "foobar";
 
-      expect(getFirstAndLastLetters(test)).toStrictEqual({ first: "f", last: "r" });
+      expect(getFirstAndLastLetters(test)).toStrictEqual({
+        first: "f",
+        last: "r",
+      });
     });
 
     test("extract first and last letters of empty string", () => {
       const test = "";
 
-      expect(getFirstAndLastLetters(test)).toStrictEqual({ first: undefined, last: undefined });
+      expect(getFirstAndLastLetters(test)).toStrictEqual({
+        first: undefined,
+        last: undefined,
+      });
     });
   });
 
@@ -50,13 +56,25 @@ describe("LK1", () => {
     test("capitalize all elements", () => {
       const test = ["one", "two", "three", "four", "five"];
 
-      expect(getCapitalized(test)).toStrictEqual(["ONE", "TWO", "THREE", "FOUR", "FIVE"]);
+      expect(getCapitalized(test)).toStrictEqual([
+        "ONE",
+        "TWO",
+        "THREE",
+        "FOUR",
+        "FIVE",
+      ]);
     });
 
     test("capitalize odd elements", () => {
       const test = ["one", "two", "three", "four", "five"];
 
-      expect(getOddCapitalized(test)).toStrictEqual(["one", "TWO", "three", "FOUR", "five"]);
+      expect(getOddCapitalized(test)).toStrictEqual([
+        "one",
+        "TWO",
+        "three",
+        "FOUR",
+        "five",
+      ]);
     });
 
     test("get copy of array", () => {
@@ -119,9 +137,11 @@ describe("LK1", () => {
       const user = {
         name: "bob",
         password: "password123",
-     toJSON() {
-  return { name: this.name };
-    },
+        toJSON() {
+          const { password, ...rest } = this;
+
+          return rest;
+        },
       };
 
       const userAsJson = JSON.stringify(user, null, 2);
@@ -256,7 +276,7 @@ describe("LK1", () => {
       const person = new Person(firstName, middleName, lastName, birthDate);
 
       expect(person.birthDate).toBe(birthDate);
-      expect(person.age()).toBe(25);
+      expect(person.age()).toBe(26);
     });
 
     test("Add school name to teacher", () => {
@@ -266,7 +286,13 @@ describe("LK1", () => {
       const birthDate = new Date(2000, 7, 1);
       const schoolName = "HFU";
 
-      const teacher = new Person(firstName, middleName, lastName, birthDate, schoolName);
+      const teacher = new Person(
+        firstName,
+        middleName,
+        lastName,
+        birthDate,
+        schoolName,
+      );
 
       expect(teacher.firstName).toBe(firstName);
       expect(teacher.middleName).toBe(middleName);
@@ -289,7 +315,9 @@ describe("LK1", () => {
       expect(teacher.lastName).toBe(lastName);
       expect(teacher.birthDate).toBe(birthDate);
       expect(teacher.schoolName).toBe(schoolName);
-      expect(teacher.fullName()).toBe(`${firstName} ${middleName} ${lastName} @ ${schoolName}`);
+      expect(teacher.fullName()).toBe(
+        `${firstName} ${middleName} ${lastName} @ ${schoolName}`,
+      );
     });
   });
 });

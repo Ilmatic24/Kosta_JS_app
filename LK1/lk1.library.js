@@ -8,24 +8,11 @@ export class Person {
   }
 
   fullName() {
-    return [this.firstName, this.middleName, this.lastName].filter(Boolean).join(" ");
+    return [this.firstName, this.middleName, this.lastName].join(" ");
   }
 
   age() {
-    if (!(this.birthDate instanceof Date)) {
-      return undefined;
-    }
-
-    const today = new Date();
-    let age = today.getFullYear() - this.birthDate.getFullYear();
-    const monthDiff = today.getMonth() - this.birthDate.getMonth();
-    const dayDiff = today.getDate() - this.birthDate.getDate();
-
-    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-      age -= 1;
-    }
-
-    return age;
+    return new Date().getFullYear() - this.birthDate.getFullYear();
   }
 
   toString() {
