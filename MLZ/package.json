@@ -1,0 +1,12 @@
+{
+  "name": "mlz",
+  "private": true,
+  "scripts": {
+    "client:install": "npm install --prefix client",
+    "client:dev": "npm --prefix client run dev",
+    "client:test": "npm --prefix client test",
+    "server:install": "npm install --prefix server",
+    "server:dev": "npm --prefix server run dev",
+    "install:all": "npm run client:install && npm run server:install"
+  }
+}
