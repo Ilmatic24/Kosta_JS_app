@@ -1,14 +1,14 @@
 class MyElement extends HTMLElement {
   connectedCallback() {
-    this.innerHTML = `<b>Name</b>`;
+    this.innerHTML = `<b>${this.getAttribute("title") || "Title"}</b>`;
   }
 
   static get observedAttributes() {
-    return ["titles"];
+    return ["title"];
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    this.innerHTML = `<b>${newValue}</b>`;
+  attributeChangedCallback() {
+    this.innerHTML = `<b>${this.getAttribute("title") || "Title"}</b>`;
   }
 }
 

@@ -3,7 +3,7 @@
  */
 
 import { beforeEach, describe, expect, test } from "@jest/globals";
-import {} from "./lk2.library";
+import "./lk2.library";
 
 describe("LK2", () => {
   describe("DOM", () => {
@@ -15,7 +15,7 @@ describe("LK2", () => {
       </div>
     `;
 
-      const button = document;
+      const button = document.getElementById("a");
 
       expect(button.id).toBe("a");
       expect(button.tagName).toBe("BUTTON");
@@ -37,21 +37,17 @@ describe("LK2", () => {
       const [div] = document.getElementsByTagName("div");
       const button = div.firstElementChild;
 
-      let clicks = [];
-
-      function handleAndPassClick(e) {
-        clicks.push(e.currentTarget.nodeName);
-      }
+      const clicks = [];
 
       function handleClick(e) {
-        handleAndPassClick(e);
+        clicks.push(e.currentTarget.nodeName);
         e.stopPropagation();
       }
 
       document.addEventListener("click", handleClick);
       try {
         div.addEventListener("click", handleClick);
-        button.addEventListener("click", handleAndPassClick);
+        button.addEventListener("click", handleClick);
 
         button.click();
 
@@ -71,13 +67,14 @@ describe("LK2", () => {
       const [div] = document.getElementsByTagName("div");
       const button = div.firstElementChild;
 
-      let clicks = [];
+      const clicks = [];
 
       function handleClick(e) {
         clicks.push(e.currentTarget.nodeName);
+        e.stopPropagation();
       }
 
-      document.addEventListener("click", handleClick, { capture: false });
+      document.addEventListener("click", handleClick, true);
       try {
         div.addEventListener("click", handleClick);
         button.addEventListener("click", handleClick);
@@ -86,10 +83,7 @@ describe("LK2", () => {
 
         expect(clicks).toEqual(["#document"]);
       } finally {
-        // It doesn't matter if document event-listeners in other tests are still attached,
-        // but this one captures all events and then stops propagation, which breaks the
-        // expectation in the next text (for preventDefault())
-        document.removeEventListener("click", handleClick, { capture: false });
+        document.removeEventListener("click", handleClick, true);
       }
     });
   });
@@ -99,7 +93,7 @@ describe("LK2", () => {
       document.body.innerHTML = `
       <form id="vehicles">
         <input type="text">
-        <input id="firstName" type="text">
+        <input id="firstName" name="firstName" type="text" disabled>
         <select id="numCars">
           <option id="one">One</option>
           <option id="two">Two</option>
@@ -108,7 +102,7 @@ describe("LK2", () => {
       </form>
     `;
 
-      let firstNameInput = document.getElementsByTagName("form")[0].getElementsByTagName("input")[0];
+      const firstNameInput = document.getElementById("vehicles").elements.namedItem("firstName");
 
       expect(firstNameInput.id).toBe("firstName");
       expect(firstNameInput.disabled).toBeTruthy();
@@ -174,15 +168,15 @@ describe("LK2", () => {
     });
 
     test("get key/value pairs", () => {
-      document.cookie = "something=John";
-      document.cookie = "expertMode=1";
+      document.cookie = "lastUsername=John";
+      document.cookie = "expertMode=true";
 
       expect(getCookieMap()).toMatchSnapshot();
     });
 
     test("get values in object", () => {
-      document.cookie = "something=Mark";
-      document.cookie = "expertMode=John";
+      document.cookie = "lastUsername=John";
+      document.cookie = "expertMode=true";
 
       expect(getCookieObject()).toMatchSnapshot();
     });
@@ -197,7 +191,7 @@ describe("LK2", () => {
         },
       };
 
-      document.cookie = "???";
+      document.cookie = `person=${JSON.stringify(person)}`;
 
       expect(document.cookie).toMatchSnapshot();
 
@@ -223,7 +217,8 @@ describe("LK2", () => {
         }
       }
 
-      localStorage.setItem("lastUsername", "Bob");
+      localStorage.setItem("lastUsername", "John");
+      localStorage.setItem("expertMode", "true");
 
       const local = [...getLocalStorageItems()];
 
@@ -242,7 +237,8 @@ describe("LK2", () => {
         return local;
       }
 
-      // Hint: Does this test even set anything in the localStorage yet?
+      localStorage.setItem("lastUsername", "John");
+      localStorage.setItem("expertMode", "true");
 
       expect(getLocalStorageAsObject()).toMatchSnapshot();
     });
@@ -256,7 +252,7 @@ describe("LK2", () => {
         counter += 1;
 
         if (counter > 3) {
-          // what do you do to stop the interval?
+          clearInterval(t);
         }
       }, 100);
 
