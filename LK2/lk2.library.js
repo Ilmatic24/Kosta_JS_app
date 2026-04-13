@@ -7,8 +7,8 @@ class MyElement extends HTMLElement {
     return ["title"];
   }
 
-  attributeChangedCallback() {
-    this.innerHTML = `<b>${this.getAttribute("title") || "Title"}</b>`;
+  attributeChangedCallback(name, oldValue, newValue) {
+    this.innerHTML = `<b>${newValue}</b>`;
   }
 }
 
