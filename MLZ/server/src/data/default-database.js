@@ -1,3 +1,4 @@
+// users, companies und contacts decken Login, Multi-Entität und die Hauptentität der App ab.
 export const createDefaultDatabase = () => ({
   users: [
     {
@@ -41,7 +42,7 @@ export const createDefaultDatabase = () => ({
       isActive: true,
       companyId: "company-hfu",
       notes:
-        "Leitet aktuell ein kleines Frontend-Team und interessiert sich fuer Suchoberflaechen.",
+        "Leitet aktuell ein kleines Frontend-Team und interessiert sich für Suchoberflächen.",
       createdAt: "2026-03-24T00:00:00.000Z",
       updatedAt: "2026-03-24T00:00:00.000Z"
     },

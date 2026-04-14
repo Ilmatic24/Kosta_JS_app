@@ -56,7 +56,7 @@ test("delegierter Login-Submit verwendet das eigentliche Formular", async () => 
   expect(rootElement.textContent).toContain("Alice Adler");
 });
 
-test("zeigt beim fehlgeschlagenen Speichern eines Kontakts eine Rueckmeldung", async () => {
+test("zeigt beim fehlgeschlagenen Speichern eines Kontakts eine Rückmeldung", async () => {
   const rootElement = document.querySelector("#app");
   const apiClient = {
     setSession: jest.fn(),
@@ -199,7 +199,7 @@ test("legt einen neuen Kontakt an und zeigt ihn direkt in der UI", async () => {
   expect(rootElement.textContent).toContain(savedContact.fullName);
 });
 
-test("behaelt den Fokus im Suchfeld waehrend der Freitextsuche", async () => {
+test("behält den Fokus im Suchfeld während der Freitextsuche", async () => {
   const rootElement = document.querySelector("#app");
   const apiClient = {
     setSession: jest.fn(),

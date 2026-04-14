@@ -73,6 +73,7 @@ export const readContactFormValues = (formElement) => {
   });
 };
 
+// Kombiniert HTML5-Validierung mit den fachlichen Regeln aus den MLZ-Anforderungen.
 const applyCustomValidationMessages = (inputMap, values) => {
   clearCustomMessages(inputMap);
 
@@ -80,14 +81,14 @@ const applyCustomValidationMessages = (inputMap, values) => {
     inputMap.fullName?.setCustomValidity("Bitte gib einen Namen ein.");
   } else if (values.fullName.length > MAX_FULL_NAME_LENGTH) {
     inputMap.fullName?.setCustomValidity(
-      `Der Name darf hoechstens ${MAX_FULL_NAME_LENGTH} Zeichen haben.`
+      `Der Name darf höchstens ${MAX_FULL_NAME_LENGTH} Zeichen haben.`
     );
   }
 
   if (!values.email) {
     inputMap.email?.setCustomValidity("Bitte gib eine E-Mail-Adresse ein.");
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
-    inputMap.email?.setCustomValidity("Bitte gib eine gueltige E-Mail-Adresse ein.");
+    inputMap.email?.setCustomValidity("Bitte gib eine gültige E-Mail-Adresse ein.");
   }
 
   if (values.birthDate && values.birthDate > new Date().toISOString().slice(0, 10)) {
@@ -101,7 +102,7 @@ const applyCustomValidationMessages = (inputMap, values) => {
 
     if (!Number.isFinite(salaryExpectation)) {
       inputMap.salaryExpectation?.setCustomValidity(
-        "Bitte gib eine Zahl fuer die Gehaltserwartung ein."
+        "Bitte gib eine Zahl für die Gehaltserwartung ein."
       );
     } else if (salaryExpectation < 0) {
       inputMap.salaryExpectation?.setCustomValidity(
@@ -111,16 +112,17 @@ const applyCustomValidationMessages = (inputMap, values) => {
   }
 
   if (!values.companyId) {
-    inputMap.companyId?.setCustomValidity("Bitte waehle eine Firma aus.");
+    inputMap.companyId?.setCustomValidity("Bitte wähle eine Firma aus.");
   }
 
   if (values.notes.length > MAX_NOTES_LENGTH) {
     inputMap.notes?.setCustomValidity(
-      `Die Notizen duerfen hoechstens ${MAX_NOTES_LENGTH} Zeichen haben.`
+      `Die Notizen dürfen höchstens ${MAX_NOTES_LENGTH} Zeichen haben.`
     );
   }
 };
 
+// Liefert die im DOM anzeigbaren Feldfehler sowie normalisierte Werte für den API-Request.
 export const validateContactForm = (formElement) => {
   const values = readContactFormValues(formElement);
   const inputMap = getInputMap(formElement);
@@ -151,6 +153,7 @@ export const validateContactForm = (formElement) => {
   };
 };
 
+// Gespeichert werden nur Komfortfelder, damit Benutzer bei einem Reload schneller weiterarbeiten können.
 export const createDraftFromValues = (values) => {
   const normalizedValues = normalizeContactValues(values);
 

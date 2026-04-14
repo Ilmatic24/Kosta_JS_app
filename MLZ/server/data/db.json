@@ -32,20 +32,7 @@
   ],
   "contacts": [
     {
-      "id": "dbe8e119-8fea-4381-9513-b5901c29054f",
-      "ownerId": "user-bob",
-      "fullName": "Bob Berger Demo Eins",
-      "email": "bob.eins@example.com",
-      "birthDate": "1993-04-11",
-      "salaryExpectation": 58000,
-      "isActive": true,
-      "companyId": "company-hfu",
-      "notes": "Ist als Beispielkontakt fuer Formular- und Suchtests gedacht.",
-      "createdAt": "2026-03-24T13:17:10.199Z",
-      "updatedAt": "2026-03-24T13:17:10.199Z"
-    },
-    {
-      "id": "7a599a7a-89bc-470e-8c69-b8b16f963826",
+      "id": "eead6d03-4989-4a28-98fd-a11301f12e84",
       "ownerId": "user-alice",
       "fullName": "Alice Adler Demo Eins",
       "email": "alice.eins@example.com",
@@ -54,8 +41,47 @@
       "isActive": true,
       "companyId": "company-hfu",
       "notes": "Ist als Beispielkontakt fuer Formular- und Suchtests gedacht.",
-      "createdAt": "2026-03-25T10:41:06.744Z",
-      "updatedAt": "2026-03-25T10:41:06.744Z"
+      "createdAt": "2026-04-14T20:51:41.915Z",
+      "updatedAt": "2026-04-14T20:51:41.915Z"
+    },
+    {
+      "id": "41a82f8e-ec51-4223-bcfc-ffa9be7fcbbc",
+      "ownerId": "user-alice",
+      "fullName": "Alice Adler Demo Zwei",
+      "email": "alice.zwei@example.com",
+      "birthDate": "1989-09-27",
+      "salaryExpectation": 76000,
+      "isActive": false,
+      "companyId": "company-alpine",
+      "notes": "Enthaelt genug Text, damit Highlighting und Suchausschnitte pruefbar werden.",
+      "createdAt": "2026-04-14T20:51:41.915Z",
+      "updatedAt": "2026-04-14T20:51:41.915Z"
+    },
+    {
+      "id": "732e2432-630e-4af7-8ae9-3084258b0fc5",
+      "ownerId": "user-bob",
+      "fullName": "Bob Berger Demo Eins",
+      "email": "bob.eins@example.com",
+      "birthDate": "1993-04-11",
+      "salaryExpectation": 58000,
+      "isActive": true,
+      "companyId": "company-hfu",
+      "notes": "Ist als Beispielkontakt fuer Formular- und Suchtests gedacht.",
+      "createdAt": "2026-04-14T20:59:40.670Z",
+      "updatedAt": "2026-04-14T20:59:40.670Z"
+    },
+    {
+      "id": "eb6de5b1-d739-403c-a249-17eb2246a181",
+      "ownerId": "user-bob",
+      "fullName": "Bob Berger Demo Zwei",
+      "email": "bob.zwei@example.com",
+      "birthDate": "1989-09-27",
+      "salaryExpectation": 76000,
+      "isActive": false,
+      "companyId": "company-alpine",
+      "notes": "Enthaelt genug Text, damit Highlighting und Suchausschnitte pruefbar werden.",
+      "createdAt": "2026-04-14T20:59:40.670Z",
+      "updatedAt": "2026-04-14T20:59:40.670Z"
     }
   ]
 }

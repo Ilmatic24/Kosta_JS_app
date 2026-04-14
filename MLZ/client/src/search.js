@@ -19,6 +19,7 @@ const escapeRegularExpression = (value) => {
 
 const normalizeSearchText = (value) => String(value ?? "").toLocaleLowerCase("de");
 
+// companyName kommt aus der verknüpften Firmen-Entität und macht die Suche multi-entitätsfähig.
 const getFieldValue = (contact, fieldName, companiesById) => {
   if (fieldName === "companyName") {
     return companiesById[contact.companyId]?.name ?? "";
@@ -33,6 +34,7 @@ export const escapeHtml = (value) => {
   });
 };
 
+// Treffer werden direkt im angezeigten Text markiert, damit Suchergebnisse nachvollziehbar sind.
 export const highlightText = (text, query) => {
   const rawText = String(text ?? "");
   const trimmedQuery = String(query ?? "").trim();
@@ -58,6 +60,7 @@ export const highlightText = (text, query) => {
   return highlightedText;
 };
 
+// Erfüllt die MLZ-Suchpunkte: Freitextsuche, Feldfilter, Snippets und Highlighting.
 export const buildSearchResults = ({
   contacts,
   companiesById,

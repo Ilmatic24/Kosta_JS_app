@@ -9,7 +9,7 @@ const createForm = () => {
       <input name="birthDate" type="date" />
       <input name="salaryExpectation" type="number" min="0" step="1000" />
       <select name="companyId" required>
-        <option value="">Bitte Firma waehlen</option>
+        <option value="">Bitte Firma wählen</option>
         <option value="company-1">HFU Innovation Lab</option>
       </select>
       <textarea name="notes" maxlength="240"></textarea>
@@ -30,13 +30,13 @@ test("meldet Pflichtfeld- und Datumsfehler", () => {
   expect(validationResult.isValid).toBe(false);
   expect(validationResult.errors.fullName).toBe("Bitte gib einen Namen ein.");
   expect(validationResult.errors.email).toBe("Bitte gib eine E-Mail-Adresse ein.");
-  expect(validationResult.errors.companyId).toBe("Bitte waehle eine Firma aus.");
+  expect(validationResult.errors.companyId).toBe("Bitte wähle eine Firma aus.");
   expect(validationResult.errors.birthDate).toBe(
     "Das Geburtsdatum darf nicht in der Zukunft liegen."
   );
 });
 
-test("normalisiert gueltige Formularwerte fuer die API", () => {
+test("normalisiert gültige Formularwerte für die API", () => {
   const formElement = createForm();
 
   formElement.elements.namedItem("fullName").value = "Mara Klein";
@@ -44,7 +44,7 @@ test("normalisiert gueltige Formularwerte fuer die API", () => {
   formElement.elements.namedItem("birthDate").value = "1994-06-18";
   formElement.elements.namedItem("salaryExpectation").value = "62000";
   formElement.elements.namedItem("companyId").value = "company-1";
-  formElement.elements.namedItem("notes").value = "Hat Erfahrung mit Suchoberflaechen.";
+  formElement.elements.namedItem("notes").value = "Hat Erfahrung mit Suchoberflächen.";
 
   const validationResult = validateContactForm(formElement);
 
@@ -57,6 +57,6 @@ test("normalisiert gueltige Formularwerte fuer die API", () => {
     salaryExpectation: 62000,
     isActive: true,
     companyId: "company-1",
-    notes: "Hat Erfahrung mit Suchoberflaechen."
+    notes: "Hat Erfahrung mit Suchoberflächen."
   });
 });

@@ -3,6 +3,7 @@ import crypto from "node:crypto";
 import { readDatabase } from "../data/database.js";
 import { createApiError } from "../utils/api-error.js";
 
+// Für die lokale MLZ-Demo reichen In-Memory-Sitzungen ohne externe Session-DB.
 const sessionsByToken = new Map();
 
 const toPublicUser = (user) => ({
@@ -19,6 +20,7 @@ const extractBearerToken = (authorizationHeader) => {
   return authorizationHeader.slice("Bearer ".length).trim();
 };
 
+// Passwortgeschützter Login ist die Grundlage für Mandantenfähigkeit.
 export const loginUser = async ({ username, password }) => {
   const database = await readDatabase();
   const normalizedUsername = String(username ?? "").trim().toLowerCase();
@@ -31,7 +33,7 @@ export const loginUser = async ({ username, password }) => {
   });
 
   if (!matchingUser) {
-    throw createApiError(401, "Login fehlgeschlagen. Bitte pruefe Benutzername und Passwort.");
+    throw createApiError(401, "Login fehlgeschlagen. Bitte prüfe Benutzername und Passwort.");
   }
 
   const token = crypto.randomUUID();
@@ -52,12 +54,13 @@ export const logoutUser = (token) => {
   sessionsByToken.delete(token);
 };
 
+// Jede geschützte Route ermittelt den angemeldeten Benutzer und hängt ihn an das Request-Objekt.
 export const requireAuth = async (request, _response, next) => {
   try {
     const token = extractBearerToken(request.get("Authorization"));
 
     if (!token) {
-      throw createApiError(401, "Es ist keine gueltige Sitzung vorhanden.");
+      throw createApiError(401, "Es ist keine gültige Sitzung vorhanden.");
     }
 
     const userId = sessionsByToken.get(token);

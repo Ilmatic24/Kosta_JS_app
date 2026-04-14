@@ -17,6 +17,7 @@ import {
   validateContactForm
 } from "./validation.js";
 
+// Diese Auswahl bildet den MLZ-Punkt "Suche in ausgewählten Feldern" ab.
 const SEARCH_FIELD_OPTIONS = [
   { value: "fullName", label: "Name" },
   { value: "email", label: "E-Mail" },
@@ -44,6 +45,7 @@ const formatDate = (value) => {
   return new Intl.DateTimeFormat("de-DE").format(new Date(value));
 };
 
+// Komfortfunktion aus mlz.html: zuletzt eingegebene Formularwerte werden lokal vorbelegt.
 const createDefaultFormValues = () => {
   return normalizeContactValues({
     ...EMPTY_CONTACT_VALUES,
@@ -83,11 +85,12 @@ const createStatusBannerMarkup = (banner) => {
   `;
 };
 
+// Liste und Detailansicht greifen auf denselben Datensatz zu.
 const createDetailMarkup = (contact, companiesById) => {
   if (!contact) {
     return `
       <div class="empty-state">
-        Noch kein Datensatz ausgewaehlt. Waehle links einen Kontakt oder lege einen neuen an.
+        Noch kein Datensatz ausgewählt. Wähle links einen Kontakt oder lege einen neuen an.
       </div>
     `;
   }
@@ -160,8 +163,9 @@ const createSearchResultMarkup = (result, query, selectedContactId) => {
   `;
 };
 
+// Firmen sind die zweite Entität; die Auswahl im Formular zeigt die Verknüpfung.
 const createCompanyOptionsMarkup = (companies, selectedCompanyId) => {
-  const emptyOption = `<option value="">Bitte Firma waehlen</option>`;
+  const emptyOption = `<option value="">Bitte Firma wählen</option>`;
   const companyOptions = companies
     .map((company) => {
       const isSelected = company.id === selectedCompanyId ? " selected" : "";
@@ -191,6 +195,7 @@ const createSearchFiltersMarkup = (searchState) => {
   }).join("");
 };
 
+// Diese View bündelt fast alle sichtbaren MLZ-Kriterien: Suche, CRUD, Multi-Entität und Komfortfunktionen.
 const createAuthenticatedMarkup = (state) => {
   const companiesById = buildCompaniesById(state.companies);
   const selectedContact = state.contacts.find(
@@ -213,7 +218,7 @@ const createAuthenticatedMarkup = (state) => {
             );
           })
           .join("")
-      : `<div class="empty-state">Keine Kontakte fuer die aktuellen Suchkriterien gefunden.</div>`;
+      : `<div class="empty-state">Keine Kontakte für die aktuellen Suchkriterien gefunden.</div>`;
   const formValues = state.formValues;
   const isEditingExistingContact = Boolean(formValues.id);
 
@@ -268,7 +273,7 @@ const createAuthenticatedMarkup = (state) => {
             Testdaten erstellen
           </button>
           <button class="button button--danger" type="button" data-action="clear-contacts">
-            Eigene Daten loeschen
+            Eigene Daten löschen
           </button>
         </div>
       </div>
@@ -290,7 +295,7 @@ const createAuthenticatedMarkup = (state) => {
             </div>
             ${
               selectedContact
-                ? `<button class="button button--danger" type="button" data-action="delete-contact">Datensatz loeschen</button>`
+                ? `<button class="button button--danger" type="button" data-action="delete-contact">Datensatz löschen</button>`
                 : ""
             }
           </div>
@@ -375,11 +380,11 @@ const createAuthenticatedMarkup = (state) => {
               <div>
                 <p class="form-summary" data-form-summary></p>
                 <p class="meta-text">
-                  Die Felder Name, E-Mail, Firma und Notizen werden lokal vorbefuellt.
+                  Die Felder Name, E-Mail, Firma und Notizen werden lokal vorbefüllt.
                 </p>
               </div>
               <button class="button button--primary" type="submit">
-                ${isEditingExistingContact ? "Aenderungen speichern" : "Kontakt speichern"}
+                ${isEditingExistingContact ? "Änderungen speichern" : "Kontakt speichern"}
               </button>
             </div>
           </form>
@@ -450,6 +455,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     clearSession();
   };
 
+  // Nach Login oder Bootstrap übernimmt die UI nur die Daten des angemeldeten Benutzers.
   const applyAuthenticatedPayload = (payload) => {
     const nextSession = {
       token: payload.token ?? state.session?.token ?? "",
@@ -505,6 +511,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     }
   };
 
+  // Validierungsfehler werden sichtbar im DOM gerendert und deaktivieren den Speichern-Button.
   const refreshContactFormState = (formElement) => {
     const validationResult = validateContactForm(formElement);
     const mergedErrors = {
@@ -563,6 +570,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     };
   };
 
+  // Das Suchfeld behält trotz Re-Render den Fokus, damit die Suche flüssig bedienbar bleibt.
   const captureSearchFocusState = (eventTarget) => {
     if (!(eventTarget instanceof HTMLInputElement) || eventTarget.id !== "search-query") {
       return null;
@@ -628,6 +636,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     });
   };
 
+  // Login ist die Grundlage für Mandantenfähigkeit: danach sieht der Benutzer nur eigene Kontakte.
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
 
@@ -671,6 +680,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     render();
   };
 
+  // Speichert neue oder bestehende Kontakte als JSON über die API und aktualisiert danach Liste und Detailansicht.
   const handleContactSubmit = async (event) => {
     event.preventDefault();
 
@@ -708,6 +718,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     }
   };
 
+  // CRUD-Punkt "Löschen": entfernt den aktuell ausgewählten Datensatz.
   const handleDeleteContact = async () => {
     if (!state.selectedContactId) {
       return;
@@ -729,7 +740,7 @@ export const createUi = ({ rootElement, apiClient }) => {
         state.formValues = createDefaultFormValues();
       }
 
-      setBanner("success", "Der Kontakt wurde geloescht.");
+      setBanner("success", "Der Kontakt wurde gelöscht.");
       render();
     } catch (error) {
       setBanner("error", error.message);
@@ -737,6 +748,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     }
   };
 
+  // Komfortfunktion für Demo und Präsentation: erzeugt schnell testbare Beispieldaten.
   const handleSeedContacts = async () => {
     try {
       const payload = await apiClient.seedContacts();
@@ -748,7 +760,7 @@ export const createUi = ({ rootElement, apiClient }) => {
         state.formValues = normalizeContactValues(state.contacts[0]);
       }
 
-      setBanner("success", "Fuer deinen Benutzer wurden frische Testdaten erstellt.");
+      setBanner("success", "Für deinen Benutzer wurden frische Testdaten erstellt.");
       render();
     } catch (error) {
       setBanner("error", error.message);
@@ -756,6 +768,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     }
   };
 
+  // Löscht bewusst nur die Kontakte des aktuellen Benutzers.
   const handleClearContacts = async () => {
     try {
       await apiClient.deleteAllContacts();
@@ -764,7 +777,7 @@ export const createUi = ({ rootElement, apiClient }) => {
       state.selectedContactId = null;
       state.formValues = createDefaultFormValues();
       state.serverFieldErrors = {};
-      setBanner("success", "Alle eigenen Kontakte wurden geloescht.");
+      setBanner("success", "Alle eigenen Kontakte wurden gelöscht.");
       render();
     } catch (error) {
       setBanner("error", error.message);
@@ -786,6 +799,7 @@ export const createUi = ({ rootElement, apiClient }) => {
     refreshContactFormState(formElement);
   };
 
+  // Suche inklusive Feldfilter wird gespeichert und beim nächsten Laden wiederhergestellt.
   const handleSearchChange = (event) => {
     const focusState = captureSearchFocusState(event.target);
     const formElement = rootElement.querySelector("#contact-form");
@@ -873,6 +887,7 @@ export const createUi = ({ rootElement, apiClient }) => {
   });
 
   return {
+    // Beim Neuaufruf versucht die App zuerst, die gespeicherte Sitzung aus localStorage wiederherzustellen.
     async initialize() {
       render();
 

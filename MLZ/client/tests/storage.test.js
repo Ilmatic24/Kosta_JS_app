@@ -12,7 +12,7 @@ beforeEach(() => {
   localStorage.clear();
 });
 
-test("persistiert und laedt Sitzungen ueber localStorage", () => {
+test("persistiert und lädt Sitzungen über localStorage", () => {
   const session = {
     token: "token-1",
     user: { id: "user-1", displayName: "Alice Adler" }

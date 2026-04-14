@@ -23,6 +23,7 @@ const ensureCompanyExists = (database, companyId) => {
   return database.companies.some((company) => company.id === companyId);
 };
 
+// Serverseitige Zweitvalidierung: gute UX im Client, belastbare Daten auf dem Server.
 const sanitizeContactPayload = (database, payload) => {
   const errors = {};
   const fullName = normalizeText(payload.fullName);
@@ -36,7 +37,7 @@ const sanitizeContactPayload = (database, payload) => {
   if (!fullName) {
     errors.fullName = "Der Name ist ein Pflichtfeld.";
   } else if (fullName.length > MAX_FULL_NAME_LENGTH) {
-    errors.fullName = `Der Name darf hoechstens ${MAX_FULL_NAME_LENGTH} Zeichen haben.`;
+    errors.fullName = `Der Name darf höchstens ${MAX_FULL_NAME_LENGTH} Zeichen haben.`;
   }
 
   if (!email) {
@@ -45,7 +46,7 @@ const sanitizeContactPayload = (database, payload) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailPattern.test(email)) {
-      errors.email = "Die E-Mail-Adresse ist nicht gueltig.";
+      errors.email = "Die E-Mail-Adresse ist nicht gültig.";
     }
   }
 
@@ -60,17 +61,17 @@ const sanitizeContactPayload = (database, payload) => {
   }
 
   if (!companyId) {
-    errors.companyId = "Bitte waehle eine Firma aus.";
+    errors.companyId = "Bitte wähle eine Firma aus.";
   } else if (!ensureCompanyExists(database, companyId)) {
-    errors.companyId = "Die ausgewaehlte Firma wurde nicht gefunden.";
+    errors.companyId = "Die ausgewählte Firma wurde nicht gefunden.";
   }
 
   if (notes.length > MAX_NOTES_LENGTH) {
-    errors.notes = `Die Notizen duerfen hoechstens ${MAX_NOTES_LENGTH} Zeichen haben.`;
+    errors.notes = `Die Notizen dürfen höchstens ${MAX_NOTES_LENGTH} Zeichen haben.`;
   }
 
   if (Object.keys(errors).length > 0) {
-    throw createApiError(400, "Die Formulardaten sind ungueltig.", errors);
+    throw createApiError(400, "Die Formulardaten sind ungültig.", errors);
   }
 
   return {
@@ -90,6 +91,7 @@ export const listCompanies = (database) => {
   });
 };
 
+// Kern der Mandantenfähigkeit: jeder Benutzer bekommt nur Kontakte mit passender ownerId.
 export const listContactsForUser = (database, userId) => {
   return database.contacts
     .filter((contact) => contact.ownerId === userId)
@@ -110,6 +112,7 @@ export const getContactForUser = (database, userId, contactId) => {
   return matchingContact;
 };
 
+// ownerId verbindet den neuen Datensatz eindeutig mit dem angemeldeten Benutzer.
 export const createContactForUser = (database, userId, payload) => {
   const sanitizedPayload = sanitizeContactPayload(database, payload);
   const timestamp = new Date().toISOString();
@@ -154,7 +157,7 @@ export const deleteContactForUser = (database, userId, contactId) => {
   });
 
   if (contactIndex < 0) {
-    throw createApiError(404, "Der Datensatz zum Loeschen wurde nicht gefunden.");
+    throw createApiError(404, "Der Datensatz zum Löschen wurde nicht gefunden.");
   }
 
   const [deletedContact] = database.contacts.splice(contactIndex, 1);
@@ -162,6 +165,7 @@ export const deleteContactForUser = (database, userId, contactId) => {
   return deletedContact;
 };
 
+// Diese Funktion entspricht dem MLZ-Punkt "eigene Daten löschen".
 export const deleteAllContactsForUser = (database, userId) => {
   const remainingContacts = database.contacts.filter((contact) => {
     return contact.ownerId !== userId;
@@ -173,6 +177,7 @@ export const deleteAllContactsForUser = (database, userId) => {
   return deletedCount;
 };
 
+// Seed-Daten erleichtern Demo, Tests und die Präsentation der Such- und CRUD-Funktionen.
 export const seedContactsForUser = (database, user) => {
   const timestamp = new Date().toISOString();
   const seedContacts = [
@@ -185,7 +190,7 @@ export const seedContactsForUser = (database, user) => {
       salaryExpectation: 58000,
       isActive: true,
       companyId: database.companies[0].id,
-      notes: "Ist als Beispielkontakt fuer Formular- und Suchtests gedacht.",
+      notes: "Ist als Beispielkontakt für Formular- und Suchtests gedacht.",
       createdAt: timestamp,
       updatedAt: timestamp
     },
@@ -198,7 +203,7 @@ export const seedContactsForUser = (database, user) => {
       salaryExpectation: 76000,
       isActive: false,
       companyId: database.companies[1].id,
-      notes: "Enthaelt genug Text, damit Highlighting und Suchausschnitte pruefbar werden.",
+      notes: "Enthält genug Text, damit Highlighting und Suchausschnitte prüfbar werden.",
       createdAt: timestamp,
       updatedAt: timestamp
     }

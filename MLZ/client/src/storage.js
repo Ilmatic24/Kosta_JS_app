@@ -2,6 +2,7 @@ const SESSION_STORAGE_KEY = "mlz.session";
 const SEARCH_STORAGE_KEY = "mlz.search";
 const DRAFT_STORAGE_KEY = "mlz.contactDraft";
 
+// localStorage deckt die MLZ-Komfortpunkte für Sitzung, Suche und Formularentwurf ab.
 export const DEFAULT_SEARCH_STATE = {
   query: "",
   fields: ["fullName", "email", "notes", "companyName"]
@@ -50,6 +51,7 @@ export const saveSearchState = (searchState) => {
   writeJson(SEARCH_STORAGE_KEY, searchState);
 };
 
+// Nur die für die Bedienung hilfreichen Formularfelder werden lokal gemerkt.
 export const loadDraft = () =>
   readJson(DRAFT_STORAGE_KEY, {
     fullName: "",

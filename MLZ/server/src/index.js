@@ -32,6 +32,7 @@ app.get("/api/health", (_request, response) => {
   });
 });
 
+// Login liefert direkt die benutzerbezogenen Startdaten für den ersten App-Render.
 app.post("/api/login", async (request, response, next) => {
   try {
     const session = await loginUser(request.body ?? {});
@@ -53,6 +54,7 @@ app.post("/api/logout", requireAuth, (request, response) => {
   response.status(204).end();
 });
 
+// requireAuth plus listContactsForUser sorgen dafür, dass nur eigene Daten sichtbar sind.
 app.get("/api/bootstrap", requireAuth, async (request, response, next) => {
   try {
     const database = await readDatabase();
@@ -106,6 +108,7 @@ app.get("/api/contacts/:contactId", requireAuth, async (request, response, next)
   }
 });
 
+// CRUD-Endpunkte für die Hauptentität Kontakt.
 app.post("/api/contacts", requireAuth, async (request, response, next) => {
   try {
     const contact = await mutateDatabase((database) => {
@@ -147,6 +150,7 @@ app.delete("/api/contacts/:contactId", requireAuth, async (request, response, ne
   }
 });
 
+// Komfortfunktion für Demo und Testdaten.
 app.post("/api/contacts/seed", requireAuth, async (request, response, next) => {
   try {
     const contacts = await mutateDatabase((database) => {
@@ -159,6 +163,7 @@ app.post("/api/contacts/seed", requireAuth, async (request, response, next) => {
   }
 });
 
+// Löscht nur Daten des aktuell angemeldeten Benutzers.
 app.delete("/api/contacts", requireAuth, async (request, response, next) => {
   try {
     const deletedCount = await mutateDatabase((database) => {
@@ -175,6 +180,7 @@ app.use((_request, _response, next) => {
   next(createApiError(404, "Die angeforderte Route wurde nicht gefunden."));
 });
 
+// Einheitliche JSON-Fehler helfen der UI, serverseitige Fehler wieder im DOM anzuzeigen.
 app.use((error, _request, response, _next) => {
   const status = error.status ?? 500;
   const message = error.message ?? "Ein unbekannter Serverfehler ist aufgetreten.";

@@ -6,13 +6,13 @@ test("hebt Suchbegriffe in gefundenen Texten hervor", () => {
   expect(highlightedText).toContain("<mark>Lab</mark>");
 });
 
-test("filtert Kontakte nach ausgewaehlten Suchfeldern", () => {
+test("filtert Kontakte nach ausgewählten Suchfeldern", () => {
   const contacts = [
     {
       id: "contact-1",
       fullName: "Mara Klein",
       email: "mara@example.com",
-      notes: "Liebt Suchoberflaechen",
+      notes: "Liebt Suchoberflächen",
       companyId: "company-1"
     },
     {

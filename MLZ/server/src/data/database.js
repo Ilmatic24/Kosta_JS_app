@@ -9,6 +9,7 @@ const currentDirectoryPath = path.dirname(currentFilePath);
 const dataDirectoryPath = path.resolve(currentDirectoryPath, "../../data");
 const databaseFilePath = path.join(dataDirectoryPath, "db.json");
 
+// Erstellt bei Bedarf eine lokale JSON-Datenbank für die Demo und den Entwicklungsstart.
 const ensureDatabaseFile = async () => {
   await fs.mkdir(dataDirectoryPath, { recursive: true });
 
@@ -39,6 +40,7 @@ export const writeDatabase = async (nextDatabase) => {
   return nextDatabase;
 };
 
+// Alle schreibenden Operationen laufen über Read-Modify-Write an derselben JSON-Datei.
 export const mutateDatabase = async (mutator) => {
   const database = await readDatabase();
   const nextDatabase = structuredClone(database);
